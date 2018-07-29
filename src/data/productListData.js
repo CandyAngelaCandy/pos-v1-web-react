@@ -1,7 +1,7 @@
 /**
  * Created by 22935 on 2018/3/13.
  */
- const PRODUCT_LIST = [
+const PRODUCT_LIST = [
   {
     barcode: 'ITEM000000',
     name: '可口可乐',

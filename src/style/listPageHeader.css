@@ -1,0 +1,30 @@
+.component-listPageHeader{
+  width:82%;/*不在组件内部设置宽度，取决于外层容器宽度*/
+  background-color:lightblue;
+  font-size:20px;
+  margin:0 auto;
+}
+
+.component-listPageHeader  .product-table-th{
+  overflow: hidden;//清除浮动
+  height: 50px;
+  line-height: 50px;
+  color: #3c3c3c;
+}
+
+.component-listPageHeader  .product-table-th .wp{
+  margin:0 auto;
+}
+
+.component-listPageHeader  .product-table-th      .th{
+
+  float:left;
+  width:130px;
+  padding-right:40px;
+}
+.component-listPageHeader  .product-table-th       .th-name{
+  padding-left:65px;
+}
+
+
+
