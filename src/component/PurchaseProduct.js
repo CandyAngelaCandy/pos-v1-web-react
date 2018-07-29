@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PRODUCT_LIST from '../data/productListData';
 import PREFERENTIAL_PRODUCT_LIST from '../data/promotionProduct';
 import ListPageHeader from '../component/ListPageHeader';
+import GetEveryProductType from '../component/GetEveryProductType';
 import '../style/productListItem.css';
 import '../style/siteNavBanner.css';
 import { Link } from 'react-router-dom';
@@ -13,46 +14,58 @@ class PurchaseProduct extends PureComponent {
       productList: PRODUCT_LIST,
       promotionProductList: PREFERENTIAL_PRODUCT_LIST,
       shoppingProducts: [],
-      inputGoodCount: 0
+      currentProductList: []
     };
   }
 
-  getEveryProductType = productItemBarcode => {
-    const ItemObj = this.state.promotionProductList[0]['barcodes'].find(
-      itemBarcode => {
-        return itemBarcode === productItemBarcode;
-      }
-    );
-    return ItemObj ? '买二赠一' : '无';
-  };
-
   addProductInCart = productItem => {
     const { shoppingProducts } = this.state;
+    const { currentProductList } = this.state;
 
-    const purchaseItem = shoppingProducts.find(goodItem => {
+    const currentItem = currentProductList.find((currentItemList) => {
+          return currentItemList.barcode === productItem.barcode;
+      });
+
+    if (currentItem) {
+
+      const purchaseItem = shoppingProducts.find(goodItem => {
+        return goodItem.barcode === productItem.barcode;
+      });
+
+      if (purchaseItem) {
+        purchaseItem.count = currentItem.count;
+      } else {
+        shoppingProducts.push(currentItem);
+      }
+
+      //debugger;
+
+      this.setState({
+        shoppingProducts: [...shoppingProducts]
+      });
+    }
+
+  };
+
+  changeGoodCount = (e, productItem) => {
+    const { currentProductList } = this.state;
+
+    const purchaseItem = currentProductList.find(goodItem => {
       return goodItem.barcode === productItem.barcode;
     });
 
     if (purchaseItem) {
-      purchaseItem.count = this.state.inputGoodCount;
+      purchaseItem.count = e.target.value;
     } else {
-      shoppingProducts.push({
+      currentProductList.push({
         ...productItem,
-        count: this.state.inputGoodCount
+        count: e.target.value
       });
     }
 
-    //debugger;
+    //console.log(currentProductList, "prisuxjtjsadozlhkdsal");
 
-    this.setState({
-      shoppingProducts: [...shoppingProducts]
-    });
-  };
-
-  changeGoodCount = e => {
-    this.setState({
-      inputGoodCount: e.target.value
-    });
+    this.setState({ currentProductList: [...currentProductList] });
   };
 
   transformDataToApp = () => {
@@ -82,7 +95,7 @@ class PurchaseProduct extends PureComponent {
                 <li className="td td-unit">{productItem.unit}</li>
                 <li className="td td-price">{productItem.price}</li>
                 <li className="td td-type">
-                  {this.getEveryProductType(productItem.barcode)}
+                  <GetEveryProductType barcode={productItem.barcode} />
                 </li>
                 <div className="addToCartPro">
                   <li className="td td-amount">
@@ -90,7 +103,7 @@ class PurchaseProduct extends PureComponent {
                       type="number"
                       name="number"
                       onChange={e => {
-                        this.changeGoodCount(e);
+                        this.changeGoodCount(e, productItem);
                       }}
                     />
                   </li>

@@ -1,12 +1,15 @@
 import React, { PureComponent } from 'react';
-import ListPageHeader from '../component/ListPageHeader';
+import GetEveryProductType from './GetEveryProductType';
 import '../style/productListItem.css';
+import PREFERENTIAL_PRODUCT_LIST from '../data/promotionProduct';
 
 class CartList extends PureComponent {
   constructor() {
     super();
     this.state = {
-      cartList: []
+      cartList: [],
+      cartDataToBackEnd: [],
+      productsSum: 0
     };
   }
 
@@ -21,42 +24,95 @@ class CartList extends PureComponent {
     );
   }
 
-  // getEveryProductType = productItemBarcode => {
-  //     const ItemObj = this.state.promotionProductList[0]['barcodes'].find(
-  //         itemBarcode => {
-  //             return itemBarcode === productItemBarcode;
-  //         }
-  //     );
-  //     return ItemObj ? '买二赠一' : '无';
-  // };
+  passCartDataToBackEnd = () => {
+    console.log(this.state.cartList);
 
-  // shouldComponentUpdate(){
-  //
-  // }
+    //debugger;
+    const { cartDataToBackEnd } = this.state;
+
+    this.state.cartList.map(itemList => {
+      cartDataToBackEnd.push(`${itemList.barcode}-${itemList.count}`);
+    });
+
+    this.setState(
+      {
+        cartDataToBackEnd: [...cartDataToBackEnd]
+      },
+      () => {
+        console.log('后端数据', this.state.cartDataToBackEnd);
+      }
+    );
+  };
+
+  getEveryProductType = itemBarcode => {
+    let promotionProductList = PREFERENTIAL_PRODUCT_LIST;
+
+    let selecedtItemIndex = promotionProductList[0].barcodes.indexOf(
+      itemBarcode
+    );
+
+    if (selecedtItemIndex != -1) {
+      return '买二赠一';
+    } else {
+      return '无';
+    }
+  };
+
+  calculateProductsSum = () => {
+    let { productsSum } = this.state;
+
+    //debugger;
+
+    this.state.cartList.map(item => {
+      let itemCount = parseInt(item.count, 10);
+
+      if (this.getEveryProductType(item.barcode) === '买二赠一') {
+        itemCount = itemCount >= 2 ? --itemCount : itemCount;
+      }
+
+      productsSum += item.price * itemCount;
+    });
+
+    this.setState({
+      productsSum: productsSum
+    });
+  };
 
   render() {
     return (
       <div className="CartListRoot">
         <div>购物列表</div>
-        <ListPageHeader />
-          <ul className="item-content clearfix">
-              {this.state.cartList.map(productItem => {
-                  return (
-                      <div key={productItem.barcode}>
-                          <li className="td td-name">{productItem.name}</li>
-                          <li className="td td-unit">{productItem.unit}</li>
-                          <li className="td td-price">{productItem.price}</li>
-                          <li className="td td-type">类型</li>
-                          <div className="addToCartPro">
-                              <li className="td td-amount">{productItem.count}</li>
-                          </div>
-                      </div>
-                  );
-              })}
-          </ul>
-
-        <div>确定购买</div>
-        <div>计算总价</div>
+        <div className="component-listPageHeader">
+          <div className="product-table-th">
+            <ul className="wp">
+              <li className="th th-name">名称</li>
+              <li className="th th-unit">单位</li>
+              <li className="th th-price">单价</li>
+              <li className="th th-type">类型</li>
+              <li className="th th-amount">数量</li>
+            </ul>
+          </div>
+        </div>
+        <ul className="item-content clearfix">
+          {this.state.cartList.map(productItem => {
+            return (
+              <div key={productItem.barcode}>
+                <li className="td td-name">{productItem.name}</li>
+                <li className="td td-unit">{productItem.unit}</li>
+                <li className="td td-price">{productItem.price}</li>
+                <li className="td td-type">
+                  <GetEveryProductType barcode={productItem.barcode} />
+                </li>
+                <div className="addToCartPro">
+                  <li className="td td-amount">{productItem.count}</li>
+                </div>
+              </div>
+            );
+          })}
+        </ul>
+        <button onClick={this.passCartDataToBackEnd}>确定购买</button>
+        <button onClick={this.calculateProductsSum}>计算总价</button>
+        <div>总价：{this.state.productsSum}</div>
       </div>
     );
   }

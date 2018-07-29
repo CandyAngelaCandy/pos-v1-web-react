@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PurchaseProduct from './component/PurchaseProduct';
 import CartList from './component/CartList';
-import Hello from './component/Hello';
 import {
     BrowserRouter as Router,
     Route,
