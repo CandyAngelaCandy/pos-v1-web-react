@@ -34,4 +34,18 @@
   cursor:pointer
 }
 
+.purchase-button{
+  padding: 30px 28%;
+  margin:0 auto;
+}
 
+.cart-button{
+  margin: 0 80px;
+  padding: 3px 10px;
+  font-size: 20px;
+}
+
+.product-sum{
+  padding: 10px 13%;
+  font-size: 20px;
+}

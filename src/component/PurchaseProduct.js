@@ -22,12 +22,11 @@ class PurchaseProduct extends PureComponent {
     const { shoppingProducts } = this.state;
     const { currentProductList } = this.state;
 
-    const currentItem = currentProductList.find((currentItemList) => {
-          return currentItemList.barcode === productItem.barcode;
-      });
+    const currentItem = currentProductList.find(currentItemList => {
+      return currentItemList.barcode === productItem.barcode;
+    });
 
     if (currentItem) {
-
       const purchaseItem = shoppingProducts.find(goodItem => {
         return goodItem.barcode === productItem.barcode;
       });
@@ -38,13 +37,10 @@ class PurchaseProduct extends PureComponent {
         shoppingProducts.push(currentItem);
       }
 
-      //debugger;
-
       this.setState({
         shoppingProducts: [...shoppingProducts]
       });
     }
-
   };
 
   changeGoodCount = (e, productItem) => {
@@ -62,8 +58,6 @@ class PurchaseProduct extends PureComponent {
         count: e.target.value
       });
     }
-
-    //console.log(currentProductList, "prisuxjtjsadozlhkdsal");
 
     this.setState({ currentProductList: [...currentProductList] });
   };
@@ -87,10 +81,11 @@ class PurchaseProduct extends PureComponent {
           </ul>
         </div>
         <ListPageHeader />
-        <ul className="item-content clearfix">
-          {this.state.productList.map(productItem => {
-            return (
-              <div key={productItem.barcode}>
+
+        {this.state.productList.map(productItem => {
+          return (
+            <ul className="item-content clearfix" key={productItem.barcode}>
+              <div>
                 <li className="td td-name">{productItem.name}</li>
                 <li className="td td-unit">{productItem.unit}</li>
                 <li className="td td-price">{productItem.price}</li>
@@ -118,9 +113,9 @@ class PurchaseProduct extends PureComponent {
                   </li>
                 </div>
               </div>
-            );
-          })}
-        </ul>
+            </ul>
+          );
+        })}
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import GetEveryProductType from './GetEveryProductType';
 import '../style/productListItem.css';
+import '../style/siteNavBanner.css';
 import PREFERENTIAL_PRODUCT_LIST from '../data/promotionProduct';
 
 class CartList extends PureComponent {
@@ -81,7 +82,11 @@ class CartList extends PureComponent {
   render() {
     return (
       <div className="CartListRoot">
-        <div>购物列表</div>
+        <div className="site-nav-bd">
+          <ul className="site-nav-bd-list">
+            <li className="site-nav-system-title">购物列表</li>
+          </ul>
+        </div>
         <div className="component-listPageHeader">
           <div className="product-table-th">
             <ul className="wp">
@@ -93,10 +98,10 @@ class CartList extends PureComponent {
             </ul>
           </div>
         </div>
-        <ul className="item-content clearfix">
-          {this.state.cartList.map(productItem => {
-            return (
-              <div key={productItem.barcode}>
+        {this.state.cartList.map(productItem => {
+          return (
+            <ul className="item-content clearfix" key={productItem.barcode}>
+              <div>
                 <li className="td td-name">{productItem.name}</li>
                 <li className="td td-unit">{productItem.unit}</li>
                 <li className="td td-price">{productItem.price}</li>
@@ -107,12 +112,18 @@ class CartList extends PureComponent {
                   <li className="td td-amount">{productItem.count}</li>
                 </div>
               </div>
-            );
-          })}
-        </ul>
-        <button onClick={this.passCartDataToBackEnd}>确定购买</button>
-        <button onClick={this.calculateProductsSum}>计算总价</button>
-        <div>总价：{this.state.productsSum}</div>
+            </ul>
+          );
+        })}
+        <div className="purchase-button">
+          <button className="cart-button" onClick={this.passCartDataToBackEnd}>
+            确定购买
+          </button>
+          <button className="cart-button" onClick={this.calculateProductsSum}>
+            计算总价
+          </button>
+          <div className="product-sum">总价：{this.state.productsSum}元</div>
+        </div>
       </div>
     );
   }
