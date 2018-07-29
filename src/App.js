@@ -1,7 +1,11 @@
 import React, { PureComponent } from 'react';
 import PurchaseProduct from './component/PurchaseProduct';
 import CartList from './component/CartList';
-
+import Hello from './component/Hello';
+import {
+    BrowserRouter as Router,
+    Route,
+} from 'react-router-dom'
 
 class App extends PureComponent {
   constructor() {
@@ -14,7 +18,7 @@ class App extends PureComponent {
     receivePurchaseProductData = (shoppingProducts) => {
       console.log(shoppingProducts,"qqqqqqqqq")
       this.setState({
-          cartProducts:shoppingProducts
+          cartProducts:[...shoppingProducts]
       },() => {
           // debugger;
           console.log(this.state.cartProducts,"父组件接收到购物车数据");
@@ -23,13 +27,16 @@ class App extends PureComponent {
     }
 
   render() {
-    return (
-       <div className="root">
-           <PurchaseProduct receivePurchaseProductData={this.receivePurchaseProductData}/>
-           <CartList cartList={this.state.cartProducts} />
-       </div>
-    );
+      return (
+          <Router>
+              <div>
+                  <Route exact path="/" component={() => <PurchaseProduct receivePurchaseProductData={this.receivePurchaseProductData} />} />
+                  <Route path="/cartList" component={() => <CartList cartList={this.state.cartProducts}/>} />
+              </div>
+          </Router>
+      );
   }
+
 }
 
 export default App;

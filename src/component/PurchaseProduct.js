@@ -4,6 +4,7 @@ import PREFERENTIAL_PRODUCT_LIST from '../data/promotionProduct';
 import ListPageHeader from '../component/ListPageHeader';
 import '../style/productListItem.css';
 import '../style/siteNavBanner.css';
+import { Link } from 'react-router-dom';
 
 class PurchaseProduct extends PureComponent {
   constructor() {
@@ -55,7 +56,7 @@ class PurchaseProduct extends PureComponent {
   };
 
   transformDataToApp = () => {
-      console.log(this.state.shoppingProducts,'文件夹甲方收到款')
+    console.log(this.state.shoppingProducts, '文件夹甲方收到款');
     this.props.receivePurchaseProductData(this.state.shoppingProducts);
   };
 
@@ -66,9 +67,9 @@ class PurchaseProduct extends PureComponent {
           <ul className="site-nav-bd-list">
             <li className="site-nav-system-title">购物系统</li>
             <li className="site-nav-my-cart">
-              <a href="javascript:void(0);" onClick={this.transformDataToApp}>
-                我的购物车
-              </a>
+              <Link to="/cartList">
+                <div onClick={this.transformDataToApp}>我的购物车</div>
+              </Link>
             </li>
           </ul>
         </div>
